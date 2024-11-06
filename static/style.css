@@ -1,0 +1,172 @@
+/* Reset body and html to remove extra margin and padding */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+    overflow-y: hidden; /* Prevents vertical scrolling */
+}
+
+/* Navbar */
+.navbar {
+    background-color: #35B6A8 !important; /* Custom teal color */
+    height: 70px; /* Set exact height */
+    margin: 0;
+    padding: 0;
+}
+
+/* Logo */
+.logo {
+    /* height: 40px;
+    margin-right: 10px; */
+    vertical-align: middle;
+    margin-top: 5px;
+}
+
+/* Navbar Link Style */
+.navbar-nav .nav-link {
+    color: #ffffff !important;
+    font-weight: bold;
+    margin: 0 15px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #c9f0eb !important;
+}
+
+/* Main Content */
+.main-content {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 70px); /* Full viewport height minus navbar */
+    background: url("/static/background.png") no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 5%; /* Add some padding on the right */
+    color: #ffffff;
+    box-sizing: border-box;
+}
+
+/* Overlay to darken the background */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Welcome Text */
+.welcome-text {
+    position: absolute;
+    right: 5%; /* Position the text 5% from the right edge */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Adjust for vertical center */
+    text-align: right;
+    z-index: 1;
+    color: #ffffff;
+}
+
+.welcome-text h1 {
+    font-size: 3em; /* Adjust for desired size */
+    font-weight: bold;
+    margin: 0;
+}
+
+.welcome-text h1:first-child {
+    letter-spacing: 3px; /* Add spacing between letters */
+}
+
+/* Typing Effect for VISIONGUARD */
+@keyframes typing {
+    0% {
+        width: 0;
+    }
+    90% {
+        width: 100%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+/* Styling the typing effect */
+.typing {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 3px solid #35B6A8;
+    font-size: 3.5em;
+    font-weight: bold;
+    color: #35B6A8;
+    animation: typing 5s steps(14, end) infinite, blink 0.7s step-end infinite;
+    width: 0;
+    -webkit-animation: typing 5s steps(14, end) infinite, blink 0.7s step-end infinite;
+}
+
+
+
+/* Highlight class for welcome text */
+.welcome-text h1.highlight {
+    color: #35B6A8; /* Teal color for "VISIONGUARD" */
+    font-size: 3.5em; /* Slightly larger for emphasis */
+    letter-spacing: 3px;
+    margin-top: 10px;
+}
+
+/* Custom Colors */
+.bg-teal {
+    background-color: #35B6A8; /* Background color of the page */
+}
+
+.bg-light-green {
+    background-color: #E0F4F1; /* Background color for the left column */
+}
+
+.btn-teal {
+    background-color: #35B6A8;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.btn-teal:hover {
+    background-color: #2a9b8c; /* Darker teal on hover */
+}
+
+.text-teal {
+    color: #35B6A8; /* Link color for Register */
+}
+
+h3 {
+    font-weight: bold;
+}
+
+/* Additional inline styles for customization */
+.bg-teal {
+    background-color: #329D9C; /* Teal color for consistency */
+}
+.card-header {
+    font-weight: bold;
+}
+
+.card-body img {
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    max-height: 250px;
+    object-fit: contain;
+    background-color: #e9ecef;
+    padding: 10px;
+}
+.btn-light {
+    color: #329D9C;
+    font-weight: bold;
+}

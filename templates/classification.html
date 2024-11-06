@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLASSIFICATION - VisionGuard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-teal">
+        <div class="container-fluid">
+            <img src="{{ url_for('static', filename='logo_home.png') }}" alt="VisionGuard Logo" class="logo" style="max-width: 180px;">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('cnn_results') }}">CNN Results</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('classification') }}">Classification</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <!-- Input Image Section -->
+                <div class="card bg-teal text-white mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">Input Image</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ url_for('classification') }}" method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="file" class="form-label">File Input</label>
+                                <input class="form-control" type="file" id="file" name="file" required>
+                            </div>
+                            <button type="submit" value="Upload" class="btn btn-light w-100">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                <!-- Classification Result Section -->
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Classification Result</h5>
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center p-2" style="height: 250px;">
+                        {% if img_path %}
+                            <img src="{{ img_path }}" alt="Classification Result" style="width: 100%; height: 100%; max-width: 300px; max-height: 250px; object-fit: cover;">
+                        {% else %}
+                            <p>No image uploaded.</p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer text-center bg-teal text-white">
+                        {% if result %}
+                            <h5>Classification Result: {{ result }}</h5>
+                        {% else %}
+                            <h5>Classification Result: </h5>
+                        {% endif %}
+                        <!-- Button to trigger modal -->
+                        <button class="btn btn-light mt-2" data-bs-toggle="modal" data-bs-target="#interpretasiModal">Interpretasi Klasifikasi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="interpretasiModal" tabindex="-1" aria-labelledby="interpretasiModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="interpretasiModalLabel">Interpretasi Klasifikasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <h5>Saliency Map</h5>
+                            <img src="{{ saliency_map_path }}" alt="Saliency Map" style="width: 100%; height: auto; max-width: 250px; max-height: 250px;">
+                            <p class="mt-2">Keterangan:<br> • Lorem Ipsum <br> • Lorem Ipsum <br> • Lorem Ipsum </p>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <h5>Grad-CAM</h5>
+                            <img src="{{ grad_cam_path }}" alt="Grad-CAM" style="width: 100%; height: auto; max-width: 250px; max-height: 250px;">
+                            <p class="mt-2">Keterangan:<br> • Lorem Ipsum <br> • Lorem Ipsum <br> • Lorem Ipsum </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle (with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
