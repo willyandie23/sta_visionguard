@@ -12,7 +12,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import cv2
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Only show errors
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Only show errors
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
