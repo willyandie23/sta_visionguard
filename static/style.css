@@ -159,14 +159,19 @@ h3 {
 
 .card-body img {
     width: 100%;
-    height: auto;
-    max-width: 300px;
-    max-height: 250px;
+    height: 100%;
+    max-width: 750px;
+    max-height: 500px;
     object-fit: contain;
     background-color: #e9ecef;
     padding: 10px;
 }
+
 .btn-light {
     color: #329D9C;
     font-weight: bold;
+}
+
+.small-nav-link {
+    font-size: 0.74rem; /* Adjust font size as needed */
 }
