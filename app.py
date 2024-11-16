@@ -7,12 +7,16 @@ import os
 import tensorflow as tf
 import numpy as np
 from tensorflow.keras.models import load_model # type: ignore
-from tensorflow.keras.preprocessing import image # type: ignore
 from PIL import Image
 import matplotlib.pyplot as plt
 import cv2
 
+<<<<<<< Updated upstream
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Only show errors
+=======
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Only show errors
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+>>>>>>> Stashed changes
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -37,7 +41,7 @@ model_prediction = load_model("model/best_model.h5")
 
 # Define the class labels
 CLASS_LABELS = ['cataract', 'diabetic_retinopathy', 'glaucoma', 'normal']
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -56,7 +60,7 @@ class User(db.Model):
 
 # Function to preprocess image for prediction
 def preprocess_image(image_path):
-    img = Image.open(image_path)
+    img = Image.open(image_path).convert("RGB")  # Convert to RGB to ensure 3 channels
     img = img.resize((150, 150))  # Resize to model input size
     img = np.array(img) / 255.0   # Normalize to [0, 1]
     img = np.expand_dims(img, axis=0)  # Add batch dimension
@@ -83,7 +87,6 @@ def generate_grad_cam(img_array, model, layer_name="block5_conv3"):  # Adjust la
     heatmap = cv2.resize(heatmap, (150, 150))
 
     return heatmap
-
 
 # Function to overlay heatmap on the image
 def overlay_heatmap(heatmap, image_path, alpha=0.4, colormap=cv2.COLORMAP_JET):
@@ -127,8 +130,7 @@ def classification():
         file = request.files['file']
         
         if file and allowed_file(file.filename):
-            now = datetime.now()
-            final_filename = now.strftime("%d%m%y-%H%M%S") + ".png"
+            final_filename = "classification.png"
             final_filepath = os.path.join(app.config['UPLOAD_FOLDER'], final_filename)
             file.save(final_filepath)
             img_path = f"/static/uploads/{final_filename}".replace("\\", "/")
@@ -153,12 +155,11 @@ def classification():
             grad_cam_path = f"/static/visualizations/{grad_cam_filename}"
 
         else:
-            flash("File type not allowed. Please upload a valid image.")
+            flash("File type not allowed. Please upload a valid image (png, jpg, and jpeg).")
             return redirect(request.url)
-    
-    return render_template('classification.html', result=result, img_path=img_path,
-                        saliency_map_path=saliency_map_path, grad_cam_path=grad_cam_path)
 
+    return render_template('classification.html', result=result, img_path=img_path, 
+                        saliency_map_path=saliency_map_path, grad_cam_path=grad_cam_path)
 
 # Index Route (redirects to login)
 @app.route('/')
@@ -186,8 +187,6 @@ def login():
     
     return render_template('login.html')
 
-
-
 # Register Route
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -214,7 +213,6 @@ def register():
     
     return render_template('register.html')
 
-
 # Home Route
 @app.route('/home')
 def home():
@@ -232,7 +230,6 @@ def cnn_results():
     # Placeholder route for CNN Results page
     return render_template('cnn_results.html')  # Create cnn_results.html in templates
 
-
 # Logout Route
 @app.route('/logout')
 def logout():
@@ -241,4 +238,4 @@ def logout():
 
 # Run the application
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
