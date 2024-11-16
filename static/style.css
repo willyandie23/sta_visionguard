@@ -4,23 +4,42 @@ html, body {
     padding: 0;
     height: 100%;
     overflow-x: hidden; /* Prevents horizontal scrolling */
-    overflow-y: hidden; /* Prevents vertical scrolling */
 }
 
 /* Navbar */
 .navbar {
     background-color: #35B6A8 !important; /* Custom teal color */
-    height: 70px; /* Set exact height */
+    height: 70px;
     margin: 0;
     padding: 0;
 }
 
-/* Logo */
+/* Navbar Logo */
 .logo {
-    /* height: 40px;
-    margin-right: 10px; */
-    vertical-align: middle;
-    margin-top: 5px;
+    height: auto;  /* Remove fixed height */
+    max-width: 150px; /* Limit max width */
+    width: 100%; /* Make it responsive */
+    max-height: 150px; /* Adjust to your preference */
+    object-fit: contain; /* Ensure the logo's aspect ratio stays intact */
+}
+
+/* Make navbar container use flexbox */
+.navbar .container-fluid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Align vertically */
+}
+
+/* Responsive Navbar */
+@media (max-width: 767px) {
+    .navbar .container-fluid {
+        flex-direction: column; /* Stack logo and navbar items on mobile */
+        align-items: center;
+    }
+    
+    .logo {
+        margin-bottom: 10px;
+    }
 }
 
 /* Navbar Link Style */
@@ -112,8 +131,6 @@ html, body {
     -webkit-animation: typing 5s steps(14, end) infinite, blink 0.7s step-end infinite;
 }
 
-
-
 /* Highlight class for welcome text */
 .welcome-text h1.highlight {
     color: #35B6A8; /* Teal color for "VISIONGUARD" */
@@ -155,10 +172,17 @@ h3 {
 }
 .card-header {
     font-weight: bold;
+    background-color: #329D9C;
 }
 
 .card-body img {
     width: 100%;
+    height: auto;
+    max-width: 300px;
+    max-height: 250px;
+    height: 100%;
+    max-width: 750px;
+    max-height: 470px;
     height: 100%;
     max-width: 750px;
     max-height: 500px;
@@ -174,4 +198,11 @@ h3 {
 
 .small-nav-link {
     font-size: 0.74rem; /* Adjust font size as needed */
+}
+
+.interpretasi-result {
+    width: 100%;
+    height: 100%;
+    max-width: 250px;
+    max-height: 250px;
 }
