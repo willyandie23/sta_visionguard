@@ -11,12 +11,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import cv2
 
-<<<<<<< Updated upstream
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Only show errors
-=======
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Only show errors
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
->>>>>>> Stashed changes
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)

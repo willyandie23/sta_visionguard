@@ -177,24 +177,20 @@ h3 {
 
 .card-body img {
     width: 100%;
-<<<<<<< Updated upstream
     height: auto;
     max-width: 300px;
     max-height: 250px;
-=======
     height: 100%;
     max-width: 750px;
     max-height: 470px;
->>>>>>> Stashed changes
     object-fit: contain;
     background-color: #e9ecef;
     padding: 10px;
 }
+
 .btn-light {
     color: #329D9C;
     font-weight: bold;
-<<<<<<< Updated upstream
-=======
 }
 
 .small-nav-link {
@@ -206,5 +202,4 @@ h3 {
     height: 100%;
     max-width: 250px;
     max-height: 250px;
->>>>>>> Stashed changes
 }
