@@ -183,6 +183,9 @@ h3 {
     height: 100%;
     max-width: 750px;
     max-height: 470px;
+    height: 100%;
+    max-width: 750px;
+    max-height: 500px;
     object-fit: contain;
     background-color: #e9ecef;
     padding: 10px;

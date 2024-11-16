@@ -33,10 +33,10 @@
         </div>
     </nav>
 
-<<<<<<< Updated upstream
+
     <!-- Bootstrap JS Bundle (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-=======
+
     <!-- Main Content -->
     <div class="container mt-4">
         <div class="row">
@@ -114,6 +114,89 @@
     <!-- Bootstrap JS Bundle (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Left Side: Results Tab with Chart/Confusion Matrix/ROC Curve -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-teal">
+                        <h5 class="font-weight-bold text-white">Results Tab</h5>
+                        <ul class="nav nav-tabs card-header-tabs" id="resultsTabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active text-black font-weight-normal" id="chart-tab" data-bs-toggle="tab" href="#chart" role="tab" onclick="showImage('chart')">Chart</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-black font-weight-normal" id="confusion-matrix-tab" data-bs-toggle="tab" href="#confusion-matrix" role="tab" onclick="showImage('confusion-matrix')">Confusion Matrix</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-black font-weight-normal" id="roc-curve-tab" data-bs-toggle="tab" href="#roc-curve" role="tab" onclick="showImage('roc-curve')">ROC Curve</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <!-- Placeholder for the selected image (Chart/Confusion Matrix/ROC Curve) -->
+                            <img id="result-image" src="{{ url_for('static', filename='result_tab/chart.png') }}" alt="Results Display" style="height: max-content; width: max-content;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Metrics with Progress Bars -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-teal">
+                        <h5 class="font-weight-bold text-white">Metrics</h5>
+                        <ul class="nav nav-tabs card-header-tabs" id="metricsTabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active text-black font-weight-normal small-nav-link" id="cataract-tab" data-bs-toggle="tab" href="#cataract" role="tab" onclick="updateMetrics('cataract')">Cataract</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-black font-weight-normal small-nav-link" id="diabetic-tab" data-bs-toggle="tab" href="#diabetic_retinopathy" role="tab" onclick="updateMetrics('diabetic_retinopathy')">Diabetic Retinopathy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-black font-weight-normal small-nav-link" id="glaucoma-tab" data-bs-toggle="tab" href="#glaucoma" role="tab" onclick="updateMetrics('glaucoma')">Glaucoma</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-black font-weight-normal small-nav-link" id="normal-tab" data-bs-toggle="tab" href="#normal" role="tab" onclick="updateMetrics('normal')">Normal</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="progress-info">
+                            <label>Precision</label>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-success" id="precision-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                            </div>
+                            <div class="progress-info">
+                                <label>Recall</label>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-info" id="recall-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <label>F1-Score</label>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-danger" id="f1-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                </div>
+                            </div>
+                            <!-- <div class="progress-info">
+                                <label>Support</label>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-danger" id="support-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle (with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- Custom JavaScript for Image Switching -->
     <script>
         function showImage(tabName) {
@@ -148,6 +231,14 @@
             normal: {
                 precision: 68, recall: 88, f1: 77
             }
+            cataract: { precision: 93, recall: 84, f1: 88 },
+            diabetic_retinopathy: { precision: 99, recall: 91, f1: 95 },
+            glaucoma: { precision: 77, recall: 75, f1: 76 },
+            normal: { precision: 68, recall: 88, f1: 77 }
+            // cataract: { precision: 93, recall: 84, f1: 88, support: 232 },
+            // diabetic_retinopathy: { precision: 99, recall: 91, f1: 95, support: 240 },
+            // glaucoma: { precision: 77, recall: 75, f1: 76, support: 209 },
+            // normal: { precision: 68, recall: 88, f1: 77, support: 168 }
         };
 
         function updateMetrics(category) {
@@ -166,6 +257,10 @@
             document.getElementById('f1-bar').style.width = metrics.f1 + '%';
             document.getElementById('f1-bar').setAttribute('aria-valuenow', metrics.f1);
             document.getElementById('f1-bar').textContent = metrics.f1 + '%';
+
+            // document.getElementById('support-bar').style.width = metrics.support + '%';
+            // document.getElementById('support-bar').setAttribute('aria-valuenow', metrics.support);
+            // document.getElementById('support-bar').textContent = metrics.support + '%';
         }
 
         // Initialize with the first category's metrics
@@ -173,6 +268,5 @@
             updateMetrics('cataract');
         });
     </script>
->>>>>>> Stashed changes
 </body>
 </html>
