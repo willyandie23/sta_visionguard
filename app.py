@@ -1,3 +1,4 @@
+# Import Library
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
@@ -12,19 +13,22 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import cv2
 
+<<<<<<< Updated upstream
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Only show errors
+=======
+# Configurations and Initialization
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+>>>>>>> Stashed changes
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-# Database configuration for MySQL on XAMPP
+## Database configuration for MySQL on XAMPP
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost:3306/visionguard_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize SQLAlchemy
-db = SQLAlchemy(app)
-
-# Configuration for file uploads
+## Configuration for file uploads
 UPLOAD_FOLDER = 'static/uploads'
 VISUALIZATION_FOLDER = 'static/visualizations'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -32,13 +36,21 @@ app.config['VISUALIZATION_FOLDER'] = VISUALIZATION_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(VISUALIZATION_FOLDER, exist_ok=True)
 
-# Load the pre-trained model
+## Initialize SQLAlchemy
+db = SQLAlchemy(app)
+
+## Load the pre-trained model
 model_prediction = load_model("model/best_model.h5")
 
-# Define the class labels
+## Define the class labels
 CLASS_LABELS = ['cataract', 'diabetic_retinopathy', 'glaucoma', 'normal']
+<<<<<<< Updated upstream
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+=======
+>>>>>>> Stashed changes
 
+## Define Allowed Extensions
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -54,7 +66,8 @@ class User(db.Model):
     def __repr__(self):
         return f"<User {self.username}>"
 
-# Function to preprocess image for prediction
+# Function
+## Function to preprocess image for prediction
 def preprocess_image(image_path):
     img = Image.open(image_path)
     img = img.resize((150, 150))  # Resize to model input size
@@ -62,7 +75,7 @@ def preprocess_image(image_path):
     img = np.expand_dims(img, axis=0)  # Add batch dimension
     return img
 
-# Function to generate Grad-CAM visualization
+## Function to generate Grad-CAM visualization
 def generate_grad_cam(img_array, model, layer_name="block5_conv3"):  # Adjust layer_name as per model
     grad_model = tf.keras.models.Model(
         [model.inputs], [model.get_layer(layer_name).output, model.output]
@@ -84,8 +97,12 @@ def generate_grad_cam(img_array, model, layer_name="block5_conv3"):  # Adjust la
 
     return heatmap
 
+<<<<<<< Updated upstream
 
 # Function to overlay heatmap on the image
+=======
+## Function to overlay heatmap on the image
+>>>>>>> Stashed changes
 def overlay_heatmap(heatmap, image_path, alpha=0.4, colormap=cv2.COLORMAP_JET):
     # Load and resize the original image to match the heatmap size
     img = cv2.imread(image_path)
@@ -98,7 +115,7 @@ def overlay_heatmap(heatmap, image_path, alpha=0.4, colormap=cv2.COLORMAP_JET):
     overlayed_img = cv2.addWeighted(heatmap_colored, alpha, img, 1 - alpha, 0)
     return overlayed_img
 
-# Function to generate Saliency Map visualization
+## Function to generate Saliency Map visualization
 def generate_saliency_map(img_array, model):
     # Convert the numpy array to a TensorFlow tensor and watch it
     img_tensor = tf.convert_to_tensor(img_array)
@@ -112,6 +129,76 @@ def generate_saliency_map(img_array, model):
     saliency = np.max(np.abs(grads), axis=-1)[0]
     return saliency
 
+# Route Handlers
+## Index Route
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
+
+## Login Route
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        # Cari user berdasarkan username
+        user = User.query.filter_by(username=username).first()
+        
+        # Cek apakah user ada dan password cocok
+        if user and check_password_hash(user.password, password):
+            session['loggedin'] = True
+            session['user_id'] = user.user_id
+            session['username'] = user.username
+            return redirect(url_for('home'))
+        else:
+            flash('Username atau password salah. Silakan coba lagi.')
+    
+    return render_template('login.html')
+
+## Register Route
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        
+        # Cek jika password dan verifikasi password cocok
+        if password != confirm_password:
+            flash('Password dan Verifikasi Password tidak cocok. Silakan coba lagi.')
+            return redirect(url_for('register'))
+        
+        # Hash password sebelum menyimpannya
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+        
+        # Tambahkan user baru ke database
+        new_user = User(username=username, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        
+        # flash('Anda berhasil mendaftar! Silakan login.')
+        return redirect(url_for('login'))
+    
+    return render_template('register.html')
+
+## Home Route
+@app.route('/home')
+def home():
+    print("Session loggedin:", session.get('loggedin'))
+    
+    if 'loggedin' in session:
+        return render_template('home.html', username=session['username'])
+    else:
+        return redirect(url_for('login'))
+
+## Logout Route
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+## Classification Route
 @app.route('/classification', methods=['GET', 'POST'])
 def classification():
     result = None
@@ -159,6 +246,7 @@ def classification():
     return render_template('classification.html', result=result, img_path=img_path,
                         saliency_map_path=saliency_map_path, grad_cam_path=grad_cam_path)
 
+<<<<<<< Updated upstream
 
 # Index Route (redirects to login)
 @app.route('/')
@@ -238,6 +326,13 @@ def cnn_results():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+=======
+## CNN Results Route
+@app.route('/cnn_results')
+def cnn_results():
+    # Placeholder route for CNN Results page
+    return render_template('cnn_results.html')
+>>>>>>> Stashed changes
 
 # Run the application
 if __name__ == '__main__':
