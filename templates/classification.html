@@ -73,8 +73,10 @@
                         
                         {% if result %}
                             <h5>Classification Result: {{ result }}</h5>
+                            <h5>Accuracy Score: {{probability|round(2)}}%</h5>
                         {% else %}
                             <h5>Classification Result: </h5>
+                            <h5>Accuracy Score: </h5>
                         {% endif %}
                         
                         <!-- Button to trigger modal -->
@@ -104,24 +106,18 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="interpretasiModalLabel">Interpretasi Klasifikasi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
                             <h5 class="text-center">Saliency Map</h5>
 
-                            {% if saliency_map_path %}
+                            {% if result %}
                                 <div class="d-flex justify-content-center">
                                     <img src="{{ saliency_map_path }}" alt="Saliency Map" class="interpretasi-result">
                                 </div>
                                 <p class="mt-2" style="text-align: justify;">
-                                    Pada visualisasi <strong>Saliency Map</strong> ini, Anda melihat area yang paling berpengaruh dalam keputusan model. Warna yang lebih terang menunjukkan bagian-bagian gambar yang dianggap penting oleh model dalam proses klasifikasi. Misalnya, jika ada kerusakan atau kelainan pada retina, bagian tersebut akan tampak lebih terang di peta ini. Interpretasi ini-result membantu Anda memahami area mana yang paling diperhatikan model saat menentukan hasil diagnosis. Harap diingat, metode ini sensitif terhadap perubahan kecil pada gambar, jadi perlu kehati-hatian dalam menafsirkan hasilnya.
-                                    
-                                    <!-- <strong>Keterangan:</strong><br>
-                                    • <strong>Penekanan pada Area Kritis:</strong> Menunjukkan bagian gambar yang paling berkontribusi terhadap keputusan model. <br>
-                                    • <strong>Intensitas Warna sebagai Indikator:</strong> Area dengan warna lebih terang mengindikasikan pengaruh yang lebih besar dalam klasifikasi. <br>
-                                    • <strong>Ketelitian Diperlukan:</strong> Interpretasi ini dapat sensitif terhadap variasi kecil dalam gambar, sehingga hasilnya perlu diperiksa dengan hati-hati. -->
+                                    {{ interpretation_text_sm_result|safe }}
                                 </p>
                             {% endif %}
                             
@@ -129,17 +125,12 @@
                         <div class="col-md-6">
                             <h5 class="text-center">Grad-CAM</h5>
                             
-                            {% if saliency_map_path %}
+                            {% if result %}
                                 <div class="d-flex justify-content-center">
                                     <img src="{{ grad_cam_path }}" alt="Grad-CAM" class="interpretasi-result">
                                 </div>
                                 <p class="mt-2" style="text-align: justify;">
-                                    Pada visualisasi <strong>Grad-CAM</strong> ini, Anda dapat melihat area spesifik pada gambar yang diperhatikan model. Warna terang di bagian tengah, misalnya, menunjukkan fokus utama model dalam menentukan klasifikasi. Grad-CAM menggunakan lapisan konvolusi terakhir untuk mengidentifikasi fitur utama dalam gambar, sehingga Anda bisa melihat bagian mana yang mungkin mengindikasikan kelainan, seperti adanya kekeruhan lensa pada katarak atau peningkatan tekanan di area retina pada kasus glaukoma. Ini memberi Anda gambaran yang lebih jelas tentang bagaimana model mengambil keputusan, sehingga Anda bisa lebih percaya diri dalam memahami hasil klasifikasi ini.
-
-                                    <!-- <strong>Keterangan:</strong><br>
-                                    • <strong>Identifikasi Area Penting:</strong> Memvisualisasikan bagian gambar yang dianggap penting oleh model, seperti area retina yang mengalami kelainan. <br>
-                                    • <strong>Aktivasi Layer Konvolusi:</strong> Menggunakan layer konvolusi terakhir untuk menunjukkan fitur utama yang mempengaruhi prediksi. <br>
-                                    • <strong>Keandalan Visualisasi:</strong> Grad-CAM sering dianggap lebih stabil dan dapat diandalkan dalam konteks medis, terutama untuk membantu para ahli mengidentifikasi area penting pada gambar. -->
+                                    {{ interpretation_text_gradcam_result|safe }}
                                 </p>
                             {% endif %}
 
