@@ -39,9 +39,6 @@ model_prediction = load_model("model/best_model_visionguard_pv.h5")
 
 # Define the class labels
 CLASS_LABELS = ['cataract', 'diabetic_retinopathy', 'glaucoma', 'normal']
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # User model for database
 class User(db.Model):
@@ -56,6 +53,7 @@ class User(db.Model):
         return f"<User {self.username}>"
 
 # Function to check allowed file types
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -191,6 +189,8 @@ def classification():
     predicted_probability = None
     interpretation_text_sm = None
     interpretation_text_gradcam = None
+    
+    class_probabilities = None
 
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -208,15 +208,19 @@ def classification():
 
             # Preprocess the image for prediction
             img_array = preprocess_image(final_filepath)
-
-            # Predict class and calculate probability
+            
+            # Predict class and calculate predict probability
             predictions = model_prediction.predict(img_array)
             result = CLASS_LABELS[np.argmax(predictions)]
 
             predicted_class_index = np.argmax(predictions)
             predicted_probability = predictions[0][predicted_class_index] * 100
+
+            # Calculate each probability
+            class_probabilities = {
+                CLASS_LABELS[i]: round(float(predictions[0][i]) * 100, 2) for i in range(len(CLASS_LABELS))
+            }
             
-                        
             # Interpretation texts for Saliency Map and Grad-CAM
             interpretation_texts_sm = {
                 'cataract': """
@@ -294,6 +298,7 @@ def classification():
         'classification.html',
         result=result,
         probability=predicted_probability,
+        class_probabilities=class_probabilities,
         interpretation_text_sm_result=interpretation_text_sm,
         interpretation_text_gradcam_result=interpretation_text_gradcam,
         img_path=img_path,
