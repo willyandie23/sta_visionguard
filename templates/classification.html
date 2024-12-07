@@ -136,6 +136,20 @@
 
                         </div>
                     </div>
+
+                    {% if result %}
+                        <div class="text-center mt-4">
+                            <h3>Each Class Probabilities</h3>
+                            <div class="d-flex justify-content-center align-items-center">
+                                {% for label, prob in class_probabilities.items() %}
+                                    <div class="class-item me-3 mb-2">
+                                        <strong>{{ label }}:</strong> {{ prob }}%
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
