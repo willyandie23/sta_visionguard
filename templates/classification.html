@@ -105,7 +105,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="interpretasiModalLabel">Interpretasi Klasifikasi</h5>
+                    <h4 class="modal-title" id="interpretasiModalLabel">Interpretasi Klasifikasi</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -139,7 +139,7 @@
 
                     {% if result %}
                         <div class="text-center mt-4">
-                            <h3>Each Class Probabilities</h3>
+                            <h3>Probabilitas Setiap Penyakit Mata</h3>
                             <div class="d-flex justify-content-center align-items-center">
                                 {% for label, prob in class_probabilities.items() %}
                                     <div class="class-item me-3 mb-2">
