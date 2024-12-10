@@ -22,6 +22,7 @@ app.secret_key = os.urandom(24)
 # Database configuration for MySQL on XAMPP
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost:3306/visionguard_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
@@ -38,7 +39,7 @@ os.makedirs(VISUALIZATION_FOLDER, exist_ok=True)
 model_prediction = load_model("model/best_model_visionguard_pv.h5")
 
 # Define the class labels
-CLASS_LABELS = ['cataract', 'diabetic_retinopathy', 'glaucoma', 'normal']
+CLASS_LABELS = ['Cataract', 'Diabetic Retinopathy', 'Glaucoma', 'Normal']
 
 # User model for database
 class User(db.Model):
@@ -223,24 +224,24 @@ def classification():
             
             # Interpretation texts for Saliency Map and Grad-CAM
             interpretation_texts_sm = {
-                'cataract': """
+                'Cataract': """
                     Pada visualisasi <strong>Saliency Map</strong> ini, Anda akan melihat area yang sangat terang di bagian tengah atau sekitar lensa mata.
                     Ini menunjukkan area yang dianggap paling penting oleh model saat mengidentifikasi katarak, yaitu kerusakan pada lensa mata.
                     Biasanya, pada katarak, lensa mata mengalami kekeruhan atau perubahan yang terlihat pada gambar retina. 
                     Saliency map ini membantu menunjukkan bagian yang perlu lebih diperhatikan dalam gambar untuk diagnosis.
                 """,
-                'diabetic_retinopathy': """
+                'Diabetic Retinopathy': """
                     Pada visualisasi <strong>Saliency Map</strong> ini, model memperhatikan perubahan pada pembuluh darah atau titik-titik yang
                     menunjukkan adanya pendarahan di retina. Ini dapat menunjukkan gejala dari retinopati diabetik, yang umumnya ditandai oleh 
                     pembuluh darah yang rusak atau bengkak akibat diabetes. Warna terang pada bagian retina akan menunjukkan area yang paling berpengaruh
                     dalam keputusan model.
                 """,
-                'glaucoma': """
+                'Glaucoma': """
                     Pada visualisasi <strong>Saliency Map</strong> ini, area yang paling terang biasanya berada pada bagian retina atau saraf optik.
                     Ini mengindikasikan peningkatan tekanan intraokular yang terkait dengan glaukoma. Saliency map ini memberikan wawasan pada bagian yang
                     dianggap model sebagai tanda peningkatan tekanan pada saraf optik.
                 """,
-                'normal': """
+                'Normal': """
                     Pada visualisasi <strong>Saliency Map</strong> ini, tidak ada area yang mencolok karena gambar yang tidak menunjukkan kelainan.
                     Hal ini menunjukkan bahwa model tidak menemukan indikasi adanya penyakit atau kelainan pada mata, yang mengarah pada hasil klasifikasi 
                     sebagai normal.
@@ -248,7 +249,7 @@ def classification():
             }
             
             interpretation_texts_gradcam = {
-                'cataract': """
+                'Cataract': """
                     Pada visualisasi <strong>Grad-CAM</strong> ini, Anda akan melihat area dengan warna terang di sekitar lensa mata, yang menunjukkan bagian
                     yang paling diperhatikan oleh model dalam menentukan adanya katarak. Grad-CAM ini menggambarkan fokus utama model pada kekeruhan atau
                     perubahan pada lensa mata, yang merupakan ciri khas dari katarak. Warna yang lebih terang di sekitar lensa menunjukkan area yang paling
@@ -256,19 +257,19 @@ def classification():
                     tanda utama penyakit pada model.
                 """,
     
-                'diabetic_retinopathy': """Pada visualisasi <strong>Grad-CAM</strong> ini, model memfokuskan perhatian pada pembuluh darah retina yang rusak
+                'Diabetic Retinopathy': """Pada visualisasi <strong>Grad-CAM</strong> ini, model memfokuskan perhatian pada pembuluh darah retina yang rusak
                     atau titik-titik pendarahan, yang merupakan ciri khas dari retinopati diabetik. Area dengan warna terang pada retina menunjukkan tempat-tempat
                     yang dianggap model sebagai indikasi kerusakan pembuluh darah atau pembengkakan akibat diabetes. Grad-CAM membantu menggambarkan area utama
                     yang mendasari keputusan model untuk mendeteksi penyakit ini, memberi gambaran jelas pada kelainan yang perlu diwaspadai.
                 """,
                 
-                'glaucoma': """Pada visualisasi <strong>Grad-CAM</strong> ini, bagian yang paling terang biasanya terfokus pada area retina atau saraf optik, yang
+                'Glaucoma': """Pada visualisasi <strong>Grad-CAM</strong> ini, bagian yang paling terang biasanya terfokus pada area retina atau saraf optik, yang
                     menunjukkan peningkatan tekanan intraokular, karakteristik dari glaukoma. Grad-CAM ini memperlihatkan area yang dipilih oleh model yang paling
                     berpengaruh dalam menentukan diagnosa glaukoma, terutama pada saraf optik yang tertekan akibat peningkatan tekanan di dalam mata. Warna terang
                     pada saraf optik memberikan wawasan tentang tanda utama glaukoma dalam gambar.
                 """,
                 
-                'normal': """Pada visualisasi <strong>Grad-CAM</strong> ini, Anda tidak akan melihat area yang terlalu mencolok atau terang, karena gambar ini tidak
+                'Normal': """Pada visualisasi <strong>Grad-CAM</strong> ini, Anda tidak akan melihat area yang terlalu mencolok atau terang, karena gambar ini tidak
                     menunjukkan kelainan atau tanda-tanda penyakit. Hal ini menunjukkan bahwa model tidak menemukan indikasi adanya kelainan pada retina atau struktur
                     mata lainnya. Grad-CAM ini mengonfirmasi bahwa model mengidentifikasi gambar sebagai mata normal, yang tidak menunjukkan adanya kerusakan atau kondisi medis.
                 """,
